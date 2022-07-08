@@ -17,10 +17,7 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "dataflow1",
-						"type": "DataFlowReference",
-						"parameters": {
-							"Rating": "Rank"
-						}
+						"type": "DataFlowReference"
 					},
 					"compute": {
 						"coreCount": 8,

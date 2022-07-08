@@ -35,7 +35,7 @@
 				"}",
 				"source(output(",
 				"          {As of} as string,",
-				"          Rank as string,",
+				"          Rank as integer,",
 				"          {Year to Date Rank} as string,",
 				"          {Last Week Rank} as string,",
 				"          Title as string,",

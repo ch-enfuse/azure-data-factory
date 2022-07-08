@@ -1,0 +1,52 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "netflix_data",
+						"type": "DatasetReference"
+					},
+					"name": "netlix-data-stream"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {As of} as string,",
+				"          Rank as string,",
+				"          {Year to Date Rank} as string,",
+				"          {Last Week Rank} as string,",
+				"          Title as string,",
+				"          Type as string,",
+				"          {Netflix Exclusive} as string,",
+				"          {Netflix Release Date} as string,",
+				"          {Days In Top 10} as string,",
+				"          {Viewership Score} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> netlix-data-stream",
+				"netlix-data-stream select(mapColumn(",
+				"          {As of},",
+				"          Rank,",
+				"          {Year to Date Rank},",
+				"          {Last Week Rank},",
+				"          Title,",
+				"          {Netflix Release Date},",
+				"          {Days In Top 10},",
+				"          {Viewership Score}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
+			]
+		}
+	}
+}

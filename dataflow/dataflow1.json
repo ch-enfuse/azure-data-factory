@@ -23,7 +23,7 @@
 			],
 			"transformations": [
 				{
-					"name": "select1"
+					"name": "selectColumns"
 				}
 			],
 			"scriptLines": [
@@ -53,8 +53,8 @@
 				"          {Viewership Score}",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectColumns",
+				"selectColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          Column_1 as string,",

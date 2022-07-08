@@ -24,9 +24,15 @@
 			"transformations": [
 				{
 					"name": "selectColumns"
+				},
+				{
+					"name": "aggregate"
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     Rating as integer (0)",
+				"}",
 				"source(output(",
 				"          {As of} as string,",
 				"          Rank as string,",
@@ -54,7 +60,10 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectColumns",
-				"selectColumns sink(allowSchemaDrift: true,",
+				"selectColumns aggregate(groupBy(Title,",
+				"          Rank),",
+				"     AvgRanking = avg($Rating)) ~> aggregate",
+				"aggregate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          Column_1 as string,",

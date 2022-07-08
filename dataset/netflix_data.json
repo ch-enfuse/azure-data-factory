@@ -1,0 +1,64 @@
+{
+	"name": "netflix_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "netflix daily top 10.csv",
+				"container": "netlfix-data-container"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "As of",
+				"type": "String"
+			},
+			{
+				"name": "Rank",
+				"type": "String"
+			},
+			{
+				"name": "Year to Date Rank",
+				"type": "String"
+			},
+			{
+				"name": "Last Week Rank",
+				"type": "String"
+			},
+			{
+				"name": "Title",
+				"type": "String"
+			},
+			{
+				"name": "Type",
+				"type": "String"
+			},
+			{
+				"name": "Netflix Exclusive",
+				"type": "String"
+			},
+			{
+				"name": "Netflix Release Date",
+				"type": "String"
+			},
+			{
+				"name": "Days In Top 10",
+				"type": "String"
+			},
+			{
+				"name": "Viewership Score",
+				"type": "String"
+			}
+		]
+	}
+}

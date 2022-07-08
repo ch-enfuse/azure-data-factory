@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "netflix daily top 10.csv",
 				"container": "netlfix-data-container"
 			},
 			"columnDelimiter": ",",

@@ -60,7 +60,7 @@
 				"netflixInOutputStream select(mapColumn(",
 				"          Rank,",
 				"          Title,",
-				"          {Days In Top 10} = {As of}",
+				"          As_of = {As of}",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectColumns",

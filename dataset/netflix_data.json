@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "netflix_daily_top_10.csv",
-				"container": "netlfix-data-container"
+				"container": "netflix-data-container"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

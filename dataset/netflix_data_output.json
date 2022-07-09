@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "avgRatings",
-				"container": "netflix-analytics"
+				"container": "netflix-analyrics"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

@@ -64,7 +64,7 @@
 				"     TimesRanked = countIf(Rank>0 && Rank<11),",
 				"          AvgRanked = avg(toInteger(Rank)),",
 				"          Rank1 = countIf(Rank==1)) ~> aggregate1",
-				"aggregate1 sort(desc(TimesRanked, true)) ~> sortRank",
+				"aggregate1 sort(desc(Rank1, true)) ~> sortRank",
 				"sortRank keyGenerate(output(overallRank as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L,",

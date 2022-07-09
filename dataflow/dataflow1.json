@@ -29,7 +29,7 @@
 					"name": "aggregate1"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "window1"
 				}
 			],
 			"scriptLines": [
@@ -59,8 +59,10 @@
 				"     skipDuplicateMapOutputs: true) ~> selectColumns",
 				"selectColumns aggregate(groupBy(Title),",
 				"     AvgRank = avg(toInteger(Rank))) ~> aggregate1",
-				"aggregate1 derive(overallRank = rowNumber()) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"aggregate1 window(over(Title),",
+				"     asc(AvgRank, true),",
+				"     overallRank = rowNumber()) ~> window1",
+				"window1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          Column_1 as string,",

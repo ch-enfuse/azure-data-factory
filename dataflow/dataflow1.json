@@ -29,7 +29,7 @@
 					"name": "aggregate1"
 				},
 				{
-					"name": "window1"
+					"name": "sortRank"
 				}
 			],
 			"scriptLines": [
@@ -59,10 +59,8 @@
 				"     skipDuplicateMapOutputs: true) ~> selectColumns",
 				"selectColumns aggregate(groupBy(Title),",
 				"     AvgRank = avg(toInteger(Rank))) ~> aggregate1",
-				"aggregate1 window(over(Title),",
-				"     asc(AvgRank, true),",
-				"     overallRank = rowNumber()) ~> window1",
-				"window1 sink(allowSchemaDrift: true,",
+				"aggregate1 sort(desc(AvgRank, true)) ~> sortRank",
+				"sortRank sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          Column_1 as string,",

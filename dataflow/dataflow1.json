@@ -27,9 +27,6 @@
 				},
 				{
 					"name": "aggregate"
-				},
-				{
-					"name": "window1"
 				}
 			],
 			"scriptLines": [
@@ -65,11 +62,7 @@
 				"     skipDuplicateMapOutputs: true) ~> selectColumns",
 				"selectColumns aggregate(groupBy(Title),",
 				"     AvgRanking = avg(toInteger(Rank))) ~> aggregate",
-				"aggregate window(over(Title),",
-				"     asc(AvgRanking, true),",
-				"     OveralRank = rowNumber(),",
-				"     partitionBy('hash', 1)) ~> window1",
-				"window1 sink(allowSchemaDrift: true,",
+				"aggregate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          Column_1 as string,",

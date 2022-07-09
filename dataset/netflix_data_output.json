@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": "netlfix-analytics-container"
+				"container": "netflix-analytics-container"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

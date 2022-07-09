@@ -26,7 +26,10 @@
 					"name": "selectColumns"
 				},
 				{
-					"name": "aggregate"
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -49,21 +52,15 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> netflixInOutputStream",
 				"netflixInOutputStream select(mapColumn(",
-				"          {As of},",
 				"          Rank,",
-				"          {Year to Date Rank},",
-				"          {Last Week Rank},",
-				"          Title,",
-				"          {Netflix Release Date},",
-				"          {Days In Top 10},",
-				"          {Viewership Score}",
+				"          Title",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectColumns",
 				"selectColumns aggregate(groupBy(Title),",
-				"     AvgRanking = avg(toInteger(Rank)),",
-				"     partitionBy('hash', 1)) ~> aggregate",
-				"aggregate sink(allowSchemaDrift: true,",
+				"     AvgRank = avg(toInteger(Rank))) ~> aggregate1",
+				"aggregate1 derive(overallRank = rowNumber()) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          Column_1 as string,",

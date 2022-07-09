@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "avgRatings",
-				"container": "netflix-analytics-container"
+				"container": "netflix-analytics"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

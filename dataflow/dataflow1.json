@@ -27,6 +27,9 @@
 				},
 				{
 					"name": "aggregate"
+				},
+				{
+					"name": "SortRanking"
 				}
 			],
 			"scriptLines": [
@@ -63,7 +66,8 @@
 				"selectColumns aggregate(groupBy(Title),",
 				"     AvgRanking = avg(toInteger(Rank)),",
 				"     partitionBy('hash', 1)) ~> aggregate",
-				"aggregate sink(allowSchemaDrift: true,",
+				"aggregate sort(asc(AvgRanking, true)) ~> SortRanking",
+				"SortRanking sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          Column_1 as string,",

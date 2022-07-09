@@ -77,7 +77,7 @@
 				"          Rank8 = countIf(Rank==8),",
 				"          Rank9 = countIf(Rank==9),",
 				"          Rank10 = countIf(Rank==10)) ~> AggregateAction",
-				"OverallRanked sort(desc(OverallRanking, true)) ~> sortRank",
+				"OverallRanked sort(asc(OverallRanking, true)) ~> sortRank",
 				"sortRank keyGenerate(output(overallRank as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L,",
@@ -101,19 +101,7 @@
 				"          Column_10 as string",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     mapColumn(",
-				"          Title,",
-				"          TimesRanked,",
-				"          AvgRanked,",
-				"          Rank1,",
-				"          Rank2,",
-				"          Rank3,",
-				"          Rank4,",
-				"          Rank5,",
-				"          OverallRanking,",
-				"          overallRank",
-				"     )) ~> netlixSinkOutput"
+				"     skipDuplicateMapOutputs: true) ~> netlixSinkOutput"
 			]
 		}
 	}

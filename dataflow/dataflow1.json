@@ -61,7 +61,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectColumns",
 				"selectColumns aggregate(groupBy(Title),",
-				"     AvgRanking = avg($Rating)) ~> aggregate",
+				"     AvgRanking = avg(toInteger(Rank))) ~> aggregate",
 				"aggregate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",

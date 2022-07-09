@@ -19,6 +19,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "netlixSinkOutput"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -36,6 +43,9 @@
 				},
 				{
 					"name": "OverallRanked"
+				},
+				{
+					"name": "aggregate1"
 				}
 			],
 			"scriptLines": [
@@ -86,6 +96,9 @@
 				"multiply(Rank4, 7) + multiply(Rank5, 6)+multiply(Rank6,5)+ ",
 				"multiply(Rank7, 4) + multiply(Rank8, 3) + multiply(Rank9, 2) + multiply(Rank10, 1))",
 				"/TimesRanked)) ~> OverallRanked",
+				"selectColumns aggregate(groupBy(As_of),",
+				"     distinct = countDistinct(As_of),",
+				"     partitionBy('hash', 1)) ~> aggregate1",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -101,7 +114,11 @@
 				"          Column_10 as string",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> netlixSinkOutput"
+				"     skipDuplicateMapOutputs: true) ~> netlixSinkOutput",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}

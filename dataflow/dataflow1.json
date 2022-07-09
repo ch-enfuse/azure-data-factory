@@ -65,7 +65,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectColumns",
 				"selectColumns aggregate(groupBy(Title),",
-				"     TimesRanked = countAllDistinct(),",
+				"     TimesRanked = countAllDistinct(As_of),",
 				"          AvgRanked = avg(toInteger(Rank)),",
 				"          Rank1 = countIf(Rank==1),",
 				"          Rank2 = countIf(Rank==2),",

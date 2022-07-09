@@ -19,13 +19,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "netlixSinkOutput"
-				},
-				{
-					"dataset": {
-						"referenceName": "DelimitedText1",
-						"type": "DatasetReference"
-					},
-					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -43,9 +36,6 @@
 				},
 				{
 					"name": "OverallRanked"
-				},
-				{
-					"name": "aggregate1"
 				}
 			],
 			"scriptLines": [
@@ -87,18 +77,15 @@
 				"          Rank8 = countIf(Rank==8),",
 				"          Rank9 = countIf(Rank==9),",
 				"          Rank10 = countIf(Rank==10)) ~> AggregateAction",
-				"OverallRanked sort(asc(OverallRanking, true)) ~> sortRank",
+				"OverallRanked sort(desc(OverallRanking, true)) ~> sortRank",
 				"sortRank keyGenerate(output(overallRank as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L,",
 				"     partitionBy('hash', 1)) ~> surrogateKey1",
-				"AggregateAction derive(OverallRanking = 11-((multiply(Rank1,10)+ multiply(Rank2, 9) + multiply(Rank3, 8) + ",
+				"AggregateAction derive(OverallRanking = ((multiply(Rank1,10)+ multiply(Rank2, 9) + multiply(Rank3, 8) + ",
 				"multiply(Rank4, 7) + multiply(Rank5, 6)+multiply(Rank6,5)+ ",
 				"multiply(Rank7, 4) + multiply(Rank8, 3) + multiply(Rank9, 2) + multiply(Rank10, 1))",
-				"/TimesRanked)) ~> OverallRanked",
-				"selectColumns aggregate(groupBy(As_of),",
-				"     distinct = countDistinct(As_of),",
-				"     partitionBy('hash', 1)) ~> aggregate1",
+				"/55)) ~> OverallRanked",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -114,11 +101,7 @@
 				"          Column_10 as string",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> netlixSinkOutput",
-				"aggregate1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> netlixSinkOutput"
 			]
 		}
 	}

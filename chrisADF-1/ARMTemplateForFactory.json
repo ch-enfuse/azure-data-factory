@@ -47,8 +47,16 @@
 								},
 								"datasetParameters": {
 									"netflixInOutputStream": {},
-									"netlixSinkOutput": {}
-								}
+									"netlixSinkOutput": {
+										"FileName": "netflix_analytics",
+										"TimeStamp": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"FileExtension": ".csv"
+									}
+								},
+								"linkedServiceParameters": {}
 							},
 							"staging": {},
 							"compute": {
@@ -147,11 +155,26 @@
 					"referenceName": "AzureBlobStorage",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"FileName": {
+						"type": "string",
+						"defaultValue": "netflix_analytics_data"
+					},
+					"TimeStamp": {
+						"type": "string",
+						"defaultValue": "default_ts"
+					},
+					"FileExtension": {
+						"type": "string",
+						"defaultValue": ".csv"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"fileName": "@concat(dataset().FileName,dataset().Timestamp,dataset().FileExtension)",
 						"container": "out"
 					},
 					"columnDelimiter": ",",
@@ -297,9 +320,9 @@
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> netflixInOutputStream",
 						"netflixInOutputStream select(mapColumn(",
-						"          Rank,",
+						"          As_of = {As of},",
 						"          Title,",
-						"          As_of = {As of}",
+						"          Rank",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> selectColumns",

@@ -1,0 +1,24 @@
+{
+	"name": "uploadTrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pipeline1",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/netflix-data-container/blobs/netflix_daily_top_10",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/474dec0a-0283-409a-a05b-c6fb3f4e91b1/resourceGroups/chrisRG/providers/Microsoft.Storage/storageAccounts/azurechrisstorage",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

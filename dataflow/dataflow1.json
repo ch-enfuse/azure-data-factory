@@ -33,9 +33,6 @@
 				},
 				{
 					"name": "surrogateKey1"
-				},
-				{
-					"name": "OverallRanked"
 				}
 			],
 			"scriptLines": [
@@ -67,15 +64,11 @@
 				"selectColumns aggregate(groupBy(Title),",
 				"     TimesRanked = countAllDistinct(As_of),",
 				"          AvgRanked = avg(Rank)) ~> AggregateAction",
-				"OverallRanked sort(desc(OverallRanking, true)) ~> sortRank",
-				"sortRank keyGenerate(output(overallRank as long),",
+				"AggregateAction sort(desc(AvgRanked, true)) ~> sortRank",
+				"sortRank keyGenerate(output(AvgRank as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L,",
 				"     partitionBy('hash', 1)) ~> surrogateKey1",
-				"AggregateAction derive(OverallRanking = ((multiply(Rank1,10)+ multiply(Rank2, 9) + multiply(Rank3, 8) + ",
-				"multiply(Rank4, 7) + multiply(Rank5, 6)+multiply(Rank6,5)+ ",
-				"multiply(Rank7, 4) + multiply(Rank8, 3) + multiply(Rank9, 2) + multiply(Rank10, 1))",
-				"/55)) ~> OverallRanked",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",

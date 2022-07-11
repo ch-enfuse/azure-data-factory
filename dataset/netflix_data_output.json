@@ -5,11 +5,26 @@
 			"referenceName": "AzureBlobStorage",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"FileName": {
+				"type": "string",
+				"defaultValue": "netflix_analytics_data"
+			},
+			"TimeStamp": {
+				"type": "string",
+				"defaultValue": "default_ts"
+			},
+			"FileExtension": {
+				"type": "string",
+				"defaultValue": ".csv"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "@concat(dataset().FileName,dataset().Timestamp,dataset().FileExtension)",
 				"container": "out"
 			},
 			"columnDelimiter": ",",

@@ -227,7 +227,7 @@
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
 					"blobPathBeginsWith": "/netflix-data-container/blobs/netflix_daily_top_10",
-					"ignoreEmptyBlobs": true,
+					"ignoreEmptyBlobs": false,
 					"scope": "[parameters('uploadTrigger_properties_typeProperties_scope')]",
 					"events": [
 						"Microsoft.Storage.BlobCreated"

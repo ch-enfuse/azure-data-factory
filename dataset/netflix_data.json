@@ -5,20 +5,6 @@
 			"referenceName": "AzureBlobStorage",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"FileName": {
-				"type": "string",
-				"defaultValue": "netflix_data"
-			},
-			"TimeStamp": {
-				"type": "string",
-				"defaultValue": "default_ts"
-			},
-			"FileExtension": {
-				"type": "string",
-				"defaultValue": ".csv"
-			}
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

@@ -311,7 +311,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -324,7 +324,6 @@
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
 					"blobPathBeginsWith": "/netflix-data-container/blobs/netflix_daily_top_10",
-					"blobPathEndsWith": ".csv",
 					"ignoreEmptyBlobs": false,
 					"scope": "[parameters('uploadTrigger_properties_typeProperties_scope')]",
 					"events": [

@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "chrisADF-1"
+		},
+		"AzureBlobStorage_connectionString": {
+			"value": ""
+		},
+		"uploadTrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/474dec0a-0283-409a-a05b-c6fb3f4e91b1/resourceGroups/chrisRG/providers/Microsoft.Storage/storageAccounts/azurechrisstorage"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

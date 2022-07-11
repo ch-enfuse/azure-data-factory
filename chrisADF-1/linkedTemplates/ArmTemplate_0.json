@@ -1,0 +1,382 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "chrisADF-1"
+		},
+		"AzureBlobStorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage'"
+		},
+		"uploadTrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/474dec0a-0283-409a-a05b-c6fb3f4e91b1/resourceGroups/chrisRG/providers/Microsoft.Storage/storageAccounts/azurechrisstorage"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/netflix_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "netflix_daily_top_10.csv",
+						"container": "netflix-data-container"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "As of",
+						"type": "String"
+					},
+					{
+						"name": "Rank",
+						"type": "String"
+					},
+					{
+						"name": "Year to Date Rank",
+						"type": "String"
+					},
+					{
+						"name": "Last Week Rank",
+						"type": "String"
+					},
+					{
+						"name": "Title",
+						"type": "String"
+					},
+					{
+						"name": "Type",
+						"type": "String"
+					},
+					{
+						"name": "Netflix Exclusive",
+						"type": "String"
+					},
+					{
+						"name": "Netflix Release Date",
+						"type": "String"
+					},
+					{
+						"name": "Days In Top 10",
+						"type": "String"
+					},
+					{
+						"name": "Viewership Score",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/netflix_data_output')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "out"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "dates1"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "netflix_data",
+								"type": "DatasetReference"
+							},
+							"name": "netflixInOutputStream"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "netflix_data_output",
+								"type": "DatasetReference"
+							},
+							"name": "netlixSinkOutput"
+						}
+					],
+					"transformations": [
+						{
+							"name": "selectColumns"
+						},
+						{
+							"name": "AggregateAction"
+						},
+						{
+							"name": "sortRank"
+						},
+						{
+							"name": "surrogateKey1"
+						},
+						{
+							"name": "OverallRanked"
+						}
+					],
+					"scriptLines": [
+						"parameters{",
+						"     Rating as integer (0)",
+						"}",
+						"source(output(",
+						"          {As of} as string,",
+						"          Rank as integer,",
+						"          {Year to Date Rank} as string,",
+						"          {Last Week Rank} as string,",
+						"          Title as string,",
+						"          Type as string,",
+						"          {Netflix Exclusive} as string,",
+						"          {Netflix Release Date} as string,",
+						"          {Days In Top 10} as string,",
+						"          {Viewership Score} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> netflixInOutputStream",
+						"netflixInOutputStream select(mapColumn(",
+						"          Rank,",
+						"          Title,",
+						"          As_of = {As of}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectColumns",
+						"selectColumns aggregate(groupBy(Title),",
+						"     TimesRanked = countAllDistinct(As_of),",
+						"          AvgRanked = avg(toInteger(Rank)),",
+						"          Rank1 = countIf(Rank==1),",
+						"          Rank2 = countIf(Rank==2),",
+						"          Rank3 = countIf(Rank==3),",
+						"          Rank4 = countIf(Rank==4),",
+						"          Rank5 = countIf(Rank==5),",
+						"          Rank6 = countIf(Rank==6),",
+						"          Rank7 = countIf(Rank==7),",
+						"          Rank8 = countIf(Rank==8),",
+						"          Rank9 = countIf(Rank==9),",
+						"          Rank10 = countIf(Rank==10)) ~> AggregateAction",
+						"OverallRanked sort(desc(OverallRanking, true)) ~> sortRank",
+						"sortRank keyGenerate(output(overallRank as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L,",
+						"     partitionBy('hash', 1)) ~> surrogateKey1",
+						"AggregateAction derive(OverallRanking = ((multiply(Rank1,10)+ multiply(Rank2, 9) + multiply(Rank3, 8) + ",
+						"multiply(Rank4, 7) + multiply(Rank5, 6)+multiply(Rank6,5)+ ",
+						"multiply(Rank7, 4) + multiply(Rank8, 3) + multiply(Rank9, 2) + multiply(Rank10, 1))",
+						"/55)) ~> OverallRanked",
+						"surrogateKey1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Column_1 as string,",
+						"          Column_2 as string,",
+						"          Column_3 as string,",
+						"          Column_4 as string,",
+						"          Column_5 as string,",
+						"          Column_6 as string,",
+						"          Column_7 as string,",
+						"          Column_8 as string,",
+						"          Column_9 as string,",
+						"          Column_10 as string",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> netlixSinkOutput"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/netflix_data')]",
+				"[concat(variables('factoryId'), '/datasets/netflix_data_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "dataflow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {
+									"Rating": "0"
+								},
+								"datasetParameters": {
+									"netflixInOutputStream": {},
+									"netlixSinkOutput": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/uploadTrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pipeline1",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/netflix-data-container/blobs/netflix_daily_top_10",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('uploadTrigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pipeline1')]"
+			]
+		}
+	]
+}

@@ -20,6 +20,16 @@
 						"type": "DataFlowReference",
 						"parameters": {
 							"Rating": "0"
+						},
+						"datasetParameters": {
+							"netlixSinkOutput": {
+								"FileName": "netflix_analytics",
+								"TimeStamp": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"FileExtension": ".csv"
+							}
 						}
 					},
 					"compute": {
